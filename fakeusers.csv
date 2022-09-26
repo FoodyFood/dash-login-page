@@ -1,0 +1,4 @@
+username,email,password,role
+username1,email1@email.com,password1,admin
+username2,email2@email.com,password2,viewer
+username3,email3@email.com,password3,editor

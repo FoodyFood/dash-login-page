@@ -1,12 +1,12 @@
 # Variables
 admin_password = "1"
-user_list_csv = "users.csv"
+user_list_csv = "fakeusers.csv"
 
 # Commands
 create-database:
 	python3 ./create-database.py ${admin_password}
 
-load-users-from-csv:
+load-users-csv:
 	python3 ./load-users-into-database.py ${user_list_csv}
 
 display-database:

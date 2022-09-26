@@ -1,4 +1,6 @@
+import sys
 import sqlite3
+import pandas as pd
 from sqlalchemy import Table, create_engine
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash
@@ -23,11 +25,18 @@ class Users(db.Model):
 Users_tbl = Table('users', Users.metadata)
 
 
-# Wrap this in a loader that loads from CSV or something and runs 1 time for each user int he CSV
-hashed_password = generate_password_hash("password", method='sha256')
-ins = Users_tbl.insert().values(username="username",  password=hashed_password, email="email", role="none", attributes="none")
-conn = engine.connect()
-conn.execute(ins)
+# Read the user list
+df = pd.read_csv(sys.argv[1])
+print("\nLoading these users into the database:\n\n", df, "\n")
+
+
+# Add each user seperately
+for index, row in df.iterrows():
+    hashed_password = generate_password_hash(row['password'], method='sha256')
+    ins = Users_tbl.insert().values(username=row['username'],  password=hashed_password, email=row['email'], role=row['role'])
+    conn = engine.connect()
+    conn.execute(ins)
+    print(f"Added user: {row['username']}")
 
 
 conn.close()
