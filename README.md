@@ -68,7 +68,7 @@ You can create users here: `/create`
 
 Load a csv of users into the database.
 
-The filenbame of the csv this loads can be edited in the [makefile](./makefile).
+The filename of the csv this loads can be edited in the [makefile](./makefile).
 
 ```bash
 make load-users-csv
