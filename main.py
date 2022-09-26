@@ -34,6 +34,7 @@ class Users(db.Model):
     username = db.Column(db.String(15), unique=True, nullable = False)
     email = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(80))
+    role = db.Column(db.String(80))
 
 
 Users_tbl = Table('users', Users.metadata)
@@ -83,6 +84,10 @@ create = html.Div([ html.H1('Create User Account')
             , maxLength = 50)
         , html.Button('Create User', id='submit-val', n_clicks=0)
         , html.Div(id='container-button-basic')
+        , dcc.Checklist(
+            ['Admin'],
+            ['Admin']
+        )
     ])#end div
 
 
@@ -163,7 +168,10 @@ def display_page(pathname):
     elif pathname == f'{url_prefix[:-1]}/login':
         return login
     if pathname == f'{url_prefix[:-1]}/create':
-        return create
+        if current_user.is_authenticated:
+            return create
+        else:
+            return login
     elif pathname == f'{url_prefix[:-1]}/success':
         if current_user.is_authenticated:
             return success
@@ -202,6 +210,8 @@ def update_graph(dropdown_value):
     , [Input('submit-val', 'n_clicks')]
     , [State('username', 'value'), State('password', 'value'), State('email', 'value')])
 def insert_users(n_clicks, un, pw, em):
+    if un == None or pw == None: # This is run on page load, so we catch that there is no User/Pass yet and return empty
+        return [html.Div()]
     hashed_password = generate_password_hash(pw, method='sha256')
     if un is not None and pw is not None and em is not None:
         ins = Users_tbl.insert().values(username=un,  password=hashed_password, email=em,)
