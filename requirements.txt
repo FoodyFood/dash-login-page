@@ -1,0 +1,8 @@
+dash
+sqlalchemy
+werkzeug
+flask_login
+flask_sqlalchemy
+dash_core_components
+dash_html_components
+configparser
