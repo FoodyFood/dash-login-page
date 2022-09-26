@@ -41,11 +41,11 @@ try:
 except IndexError:
     admin_password = "password"
     
-print(f"Setting admin password to: {admin_password}")
+print(f"\nAdmin username: admin\nAdmin password: {admin_password}\n")
 
 # # Create the admin user
 hashed_password = generate_password_hash(admin_password, method='sha256')
-ins = Users_tbl.insert().values(username="admin",  password=hashed_password, email="example@example.com", role="none")
+ins = Users_tbl.insert().values(username="admin",  password=hashed_password, email="example@example.com", role="admin")
 conn = engine.connect()
 conn.execute(ins)
 conn.close()
