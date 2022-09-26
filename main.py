@@ -23,8 +23,8 @@ else:
 
 
 warnings.filterwarnings("ignore")
-conn = sqlite3.connect('data.sqlite')
-engine = create_engine('sqlite:///data.sqlite')
+conn = sqlite3.connect('users.sqlite')
+engine = create_engine('sqlite:///users.sqlite')
 db = SQLAlchemy()
 config = configparser.ConfigParser()
 
@@ -49,7 +49,7 @@ app.config.suppress_callback_exceptions = True
 # config
 server.config.update(
     SECRET_KEY=os.urandom(12),
-    SQLALCHEMY_DATABASE_URI='sqlite:///data.sqlite',
+    SQLALCHEMY_DATABASE_URI='sqlite:///users.sqlite',
     SQLALCHEMY_TRACK_MODIFICATIONS=False
 )
 db.init_app(server)

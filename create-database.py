@@ -2,11 +2,11 @@ import sqlite3
 from sqlalchemy import Table, create_engine
 from flask_sqlalchemy import SQLAlchemy
 
-conn = sqlite3.connect('data.sqlite')
+conn = sqlite3.connect('users.sqlite')
 
 
 #connect to the database
-engine = create_engine('sqlite:///data.sqlite')
+engine = create_engine('sqlite:///users.sqlite')
 db = SQLAlchemy()
 
 
