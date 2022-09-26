@@ -162,19 +162,23 @@ def load_user(user_id):
     Output('page-content', 'children')
     , [Input('url', 'pathname')])
 def display_page(pathname):
-    print(pathname)
+    print(f"User {current_user} navigated to: {pathname}")
     if pathname == f'{url_prefix[:-1]}/':
         return login
     elif pathname == f'{url_prefix[:-1]}/login':
         return login
     if pathname == f'{url_prefix[:-1]}/create':
         if current_user.is_authenticated:
-            return create
+            user = Users.query.filter_by(id=current_user.id).first()
+            if user.role == "admin":
+                return create
+            else:
+                return 'User does not have admin permissions'
         else:
             return login
     elif pathname == f'{url_prefix[:-1]}/success':
         if current_user.is_authenticated:
-            return create
+            return success
         else:
             return failed
     elif pathname == f'{url_prefix[:-1]}/app1':
