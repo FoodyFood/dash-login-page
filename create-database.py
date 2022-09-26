@@ -41,7 +41,7 @@ try:
 except IndexError:
     admin_password = "password"
     
-print(f"\nAdmin username: admin\nAdmin password: {admin_password}\n")
+print(f"\nAdmin Username: admin\nAdmin Password: {admin_password}\n")
 
 # # Create the admin user
 hashed_password = generate_password_hash(admin_password, method='sha256')
