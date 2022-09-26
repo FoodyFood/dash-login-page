@@ -6,7 +6,7 @@ Add authentication and user management to your dash app.
 
 This adds a user database and login page on front of your Dash app. 
 
-You can import users from a csv file, or create them in the app itself using an admin user and going to the `/create` page.
+You can import users from a csv file, or create them in the app itself by signing in as an admin user and going to the `/create` page.
 
 ## What Does It Look Like
 
