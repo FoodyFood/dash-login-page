@@ -31,8 +31,8 @@ config = configparser.ConfigParser()
 
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(15), unique=True, nullable = False)
-    email = db.Column(db.String(50), unique=True)
+    username = db.Column(db.String(150), unique=True, nullable = False)
+    email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(80))
     role = db.Column(db.String(80))
 
@@ -74,20 +74,20 @@ create = html.Div([ html.H1('Create User Account')
         , dcc.Input(id="username"
             , type="text"
             , placeholder="user name"
-            , maxLength =15)
-        , dcc.Input(id="password"
-            , type="password"
-            , placeholder="password")
+            , maxLength =140)
         , dcc.Input(id="email"
             , type="email"
             , placeholder="email"
+            , maxLength = 140)
+        , dcc.Input(id="password"
+            , type="password"
+            , placeholder="password")
+        , dcc.Input(id="role"
+            , type="text"
+            , placeholder="role"
             , maxLength = 50)
         , html.Button('Create User', id='submit-val', n_clicks=0)
         , html.Div(id='container-button-basic')
-        , dcc.Checklist(
-            ['Admin'],
-            ['Admin']
-        )
     ])#end div
 
 
@@ -174,7 +174,7 @@ def display_page(pathname):
             return login
     elif pathname == f'{url_prefix[:-1]}/success':
         if current_user.is_authenticated:
-            return success
+            return create
         else:
             return failed
     elif pathname == f'{url_prefix[:-1]}/app1':
@@ -208,13 +208,13 @@ def update_graph(dropdown_value):
 @app.callback(
    [Output('container-button-basic', "children")]
     , [Input('submit-val', 'n_clicks')]
-    , [State('username', 'value'), State('password', 'value'), State('email', 'value')])
-def insert_users(n_clicks, un, pw, em):
-    if un == None or pw == None: # This is run on page load, so we catch that there is no User/Pass yet and return empty
+    , [State('username', 'value'), State('email', 'value'), State('password', 'value'), State('role', 'value')])
+def insert_users(n_clicks, username, email, password, role):
+    if username == None or password == None: # This is run on page load, so we catch that there is no User/Pass yet and return empty
         return [html.Div()]
-    hashed_password = generate_password_hash(pw, method='sha256')
-    if un is not None and pw is not None and em is not None:
-        ins = Users_tbl.insert().values(username=un,  password=hashed_password, email=em,)
+    hashed_password = generate_password_hash(password, method='sha256')
+    if username is not None and email is not None and password is not None:
+        ins = Users_tbl.insert().values(username=username, email=email, password=hashed_password, role=role)
         conn = engine.connect()
         conn.execute(ins)
         conn.close()
@@ -227,10 +227,10 @@ def insert_users(n_clicks, un, pw, em):
     Output('url_login', 'pathname')
     , [Input('login-button', 'n_clicks')]
     , [State('uname-box', 'value'), State('pwd-box', 'value')])
-def successful(n_clicks, un, pw):
-    user = Users.query.filter_by(username=un).first()
+def successful(n_clicks, username, password):
+    user = Users.query.filter_by(username=username).first()
     if user:
-        if check_password_hash(user.password, pw):
+        if check_password_hash(user.password, password):
             login_user(user)
             return f'{url_prefix[:-1]}/success'
         else:
@@ -243,11 +243,11 @@ def successful(n_clicks, un, pw):
     Output('output-state', 'children')
     , [Input('login-button', 'n_clicks')]
     , [State('uname-box', 'value'), State('pwd-box', 'value')])
-def update_output(n_clicks, un, pw):
+def update_output(n_clicks, username, password):
     if n_clicks > 0:
-        user = Users.query.filter_by(username=un).first()
+        user = Users.query.filter_by(username=username).first()
         if user:
-            if check_password_hash(user.password, pw):
+            if check_password_hash(user.password, password):
                 return ''
             else:
                 return 'Incorrect username or password'
@@ -263,6 +263,7 @@ def update_output(n_clicks, un, pw):
 def logout_dashboard(n_clicks):
     if n_clicks > 0:
         return f'{url_prefix[:-1]}/'
+
 
 @app.callback(
     Output('url_login_df', 'pathname')
