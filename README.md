@@ -11,9 +11,13 @@ Users can either be created ahead of time in the user database, or creates using
 
 ### How To Run
 
-The [makefile](./makefile) contains all the commands needed to set up and run the example:
+The [makefile](./makefile) contains all the commands needed to set up and run the example.
 
 _Must be run in Linux terminal, requires make_
+
+First we need to set the admin password in [makefile](./makefile) 
+
+This password will be used ad the first user login for the system, from which other users are created.
 
 
 Create a database:

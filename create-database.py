@@ -1,3 +1,4 @@
+import sys
 import sqlite3
 from sqlalchemy import Table, create_engine
 from flask_sqlalchemy import SQLAlchemy
@@ -32,9 +33,18 @@ def create_users_table():
 #create the table
 create_users_table()
 
+# If no password was supplied, set it to ''password''
+
+admin_password: str
+try:
+    admin_password = sys.argv[1]
+except IndexError:
+    admin_password = "password"
+    
+print(f"Setting admin password to: {admin_password}")
 
 # # Create the admin user
-hashed_password = generate_password_hash("1", method='sha256')
+hashed_password = generate_password_hash(admin_password, method='sha256')
 ins = Users_tbl.insert().values(username="admin",  password=hashed_password, email="example@example.com", role="none")
 conn = engine.connect()
 conn.execute(ins)
